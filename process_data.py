@@ -292,10 +292,9 @@ poly_model = make_pipeline(PolynomialFeatures(degree), LinearRegression())
 
 # Use the best alpha determined in the previous step to calculate the best gamma
 best_alpha = alphas[np.argmin(mse_scores)]
-best_gamma = 1 / (2 * best_alpha**2)  # Calculate gamma from alpha
 
 # Create a Kernel Ridge model with the best gamma
-kernel_model = KernelRidge(alpha=1e-6, kernel="rbf", gamma=best_gamma)
+kernel_model = KernelRidge(alpha=best_alpha, kernel="rbf")
 
 # Fit the models and predict
 poly_model.fit(X, Y)
@@ -316,7 +315,7 @@ print(f"MSE for Kernel Ridge Regression: {mse_kernel:.4f}")
 plt.figure(figsize=(10, 6))
 plt.scatter(X, Y, color="darkorange", label="Datos reales")
 plt.plot(
-    x_plot, y_kernel, label=f"Kernel Ridge con gamma = {best_gamma:.2f}", linewidth=2
+    x_plot, y_kernel, label=f"Kernel Ridge con alpha = {best_alpha:.2f}", linewidth=2
 )
 plt.plot(
     x_plot,
